@@ -52,7 +52,7 @@ foreach ($IP in $IP_CORES) {
         
         Set-Location "$HLS_DIR\$IP"
 
-        &vivado_hls -f run_hls.tcl
+        &vitis_hls -f run_hls.tcl
 
         if (!(Test-Path -Path "$IP_REPO\$IP")){
             mkdir "$IP_REPO\$IP"

@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.5)
 
 project(network-stack-example)
 
-# Include custom Find<Module>.cmake scripts to enable searching for Vivado HLS                                
+# Include custom Find<Module>.cmake scripts to enable searching for Vitis HLS                                
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)  
 
 # Check if parent directory

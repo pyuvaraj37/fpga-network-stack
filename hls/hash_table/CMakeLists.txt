@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.5)
 set (PROJECT_NAME hash_table)
 project(${PROJECT_NAME})
 
-# Include custom Find<Module>.cmake scripts to enable searching for Vivado HLS
+# Include custom Find<Module>.cmake scripts to enable searching for Vitis HLS
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/../../cmake)
 
 # Without this variable set, CMake will build tests when running install
@@ -25,6 +25,11 @@ set(FPGA_PART xc7vx690tffg1761-2 CACHE STRING "FPGA part")
 set(DATA_WIDTH 8 CACHE STRING "Width of data path in bytes")
 set(CLOCK_PERIOD 6.4 CACHE STRING "Target clock period in nanoseconds")
 set(TCP_STACK_MAX_SESSIONS 1000 CACHE STRING "Max number of entries")
+
+find_package(VitisHLS REQUIRED)
+   if (NOT VITIS_HLS_FOUND)
+   message(FATAL_ERROR "Vitis HLS not found.")
+endif()
 
 # Installation
 if (DEFINED ENV{IPREPO_DIR})
@@ -54,7 +59,7 @@ foreach (target ${HLS_TARGETS})
    endif()
 
    add_custom_target(${target}.${PROJECT_NAME}
-      COMMAND ${VIVADO_HLS_BINARY} -f make.tcl -tclargs ${target}
+      COMMAND ${VITIS_HLS_BINARY} -f make.tcl -tclargs ${target}
       DEPENDS ${EXAMPLE_HLS_DEPENDS})
    add_dependencies(${target} ${target}.${PROJECT_NAME})
 endforeach()

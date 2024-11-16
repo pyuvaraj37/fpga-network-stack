@@ -10,7 +10,7 @@ number_of_tests = 5
 projectname = 'toe_prj'
 ##projectname = '/home/rcarley/toe/hls/toe/toe_prj/'
 
-vivado_path = "vivado_hls"
+vitis_hls = "vitis_hls"
 # infile = "in_toe.dat"
 # outfile = "out_toe.dat"
 
@@ -58,11 +58,11 @@ def run_ctest(testNumber,ooo):
   f.write('exit\n')
   f.close()
   DEVNULL = open('test.log', 'a')
-  # subprocess.call([vivado_path, "-f", testfile], stdout=DEVNULL, stderr=subprocess.STDOUT)
+  # subprocess.call([vitis_hls, "-f", testfile], stdout=DEVNULL, stderr=subprocess.STDOUT)
   # print('csim_design -argv {'+ inputFileName + rxOutputFileName + txOutputFileName + goldRxFileName +'} -clean\n')
   
   # Uncomment this:::
-  retcode = subprocess.call([vivado_path, "-f", testfile], stdout=DEVNULL, stderr=subprocess.STDOUT)
+  retcode = subprocess.call([vitis_hls, "-f", testfile], stdout=DEVNULL, stderr=subprocess.STDOUT)
   DEVNULL.close()
 
   if(retcode == 0):
@@ -117,7 +117,7 @@ def main():
 	# 	print "The directory \""+curr_dir+"\" is not valid"
 	# 	sys.exit()
 
-	#subprocess.call([vivado_path, "-f", solution_dir+"blub.tcl", "-tclargs", "blubl.in"])
+	#subprocess.call([vitis_hls, "-f", solution_dir+"blub.tcl", "-tclargs", "blubl.in"])
 
 
 if __name__ == '__main__':main()
