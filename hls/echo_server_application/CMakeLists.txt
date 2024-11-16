@@ -1,6 +1,6 @@
 # Author:  David Sidler (david.sidler@inf.ethz.ch)
 
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.5)
 
 set (PROJECT_NAME echo_server_application)
 project(${PROJECT_NAME})
@@ -24,14 +24,6 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/../../cma
 set(FPGA_PART xc7vx690tffg1761-2 CACHE STRING "FPGA part")
 #set(DATA_WIDTH 8 CACHE STRING "Width of data path in bytes")
 set(CLOCK_PERIOD 6.4 CACHE STRING "Target clock period in nanoseconds")
-
-
-# Find Xilinx Vivado HLS
-find_package(VivadoHLS REQUIRED)
-if (NOT VIVADO_HLS_FOUND)
-  message(FATAL_ERROR "Vivado HLS not found.")
-endif()
-
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 

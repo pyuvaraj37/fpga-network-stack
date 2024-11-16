@@ -1,6 +1,6 @@
 # Author:  David Sidler (david.sidler@inf.ethz.ch)
 
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.5)
 
 set (PROJECT_NAME rocev2)
 project(${PROJECT_NAME})
@@ -28,12 +28,6 @@ set(PMTU_BYTES 4096 CACHE STRING "PMTU size.")
 set(CLOCK_PERIOD 6.4 CACHE STRING "Target clock period in nanoseconds")
 # RoCE parameters
 set(ROCE_STACK_MAX_QPS 500 CACHE STRING "Maximum number of queue pairs the RoCE stack can support")
-
-# Find Xilinx HLS
-find_package(VivadoHLS REQUIRED)
-if (NOT VIVADO_HLS_FOUND)
-message(FATAL_ERROR "Xilinx HLS tools not found.")
-endif()
 
 # Installation directory
 if (DEFINED ENV{IPREPO_DIR})

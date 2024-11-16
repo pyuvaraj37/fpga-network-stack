@@ -1,6 +1,6 @@
 # Author:   David Sidler (david.sidler@inf.ethz.ch)
 
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.5)
 
 project(network-stack-example)
 

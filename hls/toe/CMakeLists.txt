@@ -1,6 +1,6 @@
 # Author:  David Sidler (david.sidler@inf.ethz.ch)
 
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.5)
 
 set (PROJECT_NAME toe)
 project(${PROJECT_NAME})
@@ -31,12 +31,6 @@ set(TCP_STACK_NODELAY_EN 1 CACHE BOOL "Enabling TCP_NODELAY option")
 set(TCP_STACK_RX_DDR_BYPASS_EN 1 CACHE BOOL "Enabling DDR bypass on the RX path")
 set(TCP_STACK_FAST_RETRANSMIT_EN 1 CACHE BOOL "Enabling TCP fast retransmit")
 set(TCP_STACK_WINDOW_SCALING_EN 1 CACHE BOOL "Enabling TCP window scaling option")
-
-# Find Xilinx HLS
-find_package(VivadoHLS REQUIRED)
-if (NOT VIVADO_HLS_FOUND)
-message(FATAL_ERROR "Xilinx HLS tools not found.")
-endif()
 
 # Installation
 if (DEFINED ENV{IPREPO_DIR})
