@@ -270,7 +270,10 @@ void rx_ibh_fsm(
 	stream<rxTimerUpdate>&	rxClearTimer_req,
 	stream<retransUpdate>&	rx2retrans_upd,
 #endif
-	ap_uint<32>&		regInvalidPsnDropCount
+	ap_uint<32>&		regInvalidPsnDropCount, 
+
+	stream<intrusionDecision>& intrusionDecisionIn, 
+	stream<intrusionDecision>& intrusionDecisionOut
 ) {
 #pragma HLS inline off
 #pragma HLS pipeline II=1
@@ -283,6 +286,8 @@ void rx_ibh_fsm(
 	static bool isResponse;
 	static ap_uint<32> droppedPackets = 0;
 	rxStateRsp qpState;
+	static intrusionDecision intrusionDecisionVar; 
+	static bool intrusionDecisionRead; 
 
 
 	switch(fsmState)
@@ -294,7 +299,17 @@ void rx_ibh_fsm(
 			exhMetaFifo.read(emeta);
 			isResponse = checkIfResponse(meta.op_code);
 			stateTable_upd_req.write(rxStateReq(meta.dest_qp, isResponse));
-			fsmState = PROCESS;
+
+			// If the read meta-info indicates a WRITE-operation, check the DPI-input 
+			if(checkIfWrite(meta.op_code)) {
+				if(!intrusionDecisionIn.empty()) {
+					intrusionDecisionIn.read(intrusionDecisionVar); 
+					intrusionDecisionRead = true; 
+					fsmState = PROCESS; 
+				}
+			} else {
+				fsmState = PROCESS;
+			}
 		}
 		break;
 	case PROCESS:
@@ -325,6 +340,11 @@ void rx_ibh_fsm(
 					ibhDropFifo.write(false);
                 }
 				ibhDropMetaFifo.write(fwdPolicy(false, false));
+
+				// If an intrusion-decision was read, forward it in this case, since the packet is otherwise acceptable 
+				if(intrusionDecisionRead) {
+					intrusionDecisionOut.write(intrusionDecisionVar);
+				}
 
 				// EXH
 				metaOut.write(ibhMeta(meta.op_code, meta.partition_key, meta.dest_qp, meta.psn, meta.validPSN));
@@ -2199,6 +2219,10 @@ void ib_transport_protocol(
 	stream<qpContext>& s_axis_qp_interface,
 	stream<ifConnReq>& s_axis_qp_conn_interface,
 
+	// Intrusion Detection Interface 
+	stream<intrusionDecision>& intrusionDecisionIn, 
+	stream<intrusionDecision>& intrusionDecisionOut, 
+
 	// Debug
 #ifdef DBG_IBV
 	stream<psnPkg>& m_axis_dbg_0,
@@ -2538,7 +2562,9 @@ void ib_transport_protocol(
 		rxClearTimer_req,
 		rx2retrans_upd,
 #endif
-		regInvalidPsnDropCount
+		regInvalidPsnDropCount, 
+		intrusionDecisionIn, 
+		intrusionDecisionOut
 	);
 
 	drop_ooo_ibh<WIDTH, INSTID>(
@@ -2777,6 +2803,8 @@ template void ib_transport_protocol<DATA_WIDTH, ninst>(		   	\
 	stream<net_axis<DATA_WIDTH> >& s_axis_mem_read_data,		\
 	stream<qpContext>& s_axis_qp_interface,		               	\
 	stream<ifConnReq>& s_axis_qp_conn_interface,		        \
+	stream<intrusionDecision>& intrusionDecisionIn, 			\
+	stream<intrusionDecision>& intrusionDecisionOut, 			\
 	stream<psnPkg>& m_axis_dbg_0,		                        \
     stream<psnPkg>& m_axis_dbg_1,		                        \
     stream<psnPkg>& m_axis_dbg_2,		                        \
@@ -2800,6 +2828,8 @@ template void ib_transport_protocol<DATA_WIDTH, ninst>(		   	\
 	stream<net_axis<DATA_WIDTH> >& s_axis_mem_read_data,		\
 	stream<qpContext>& s_axis_qp_interface,		               	\
 	stream<ifConnReq>& s_axis_qp_conn_interface,		        \
+	stream<intrusionDecision>& intrusionDecisionIn, 			\
+	stream<intrusionDecision>& intrusionDecisionOut, 			\
 	ap_uint<32>& regInvalidPsnDropCount,		                \
     ap_uint<32>& regRetransCount,		                        \
 	ap_uint<32>& regIbvCountRx,		                       	    \

@@ -170,6 +170,13 @@ struct dstTuple
 		:their_address(addr), their_port(port) {}
 };
 
+// Stream-format for the intrusion decision 
+struct intrusionDecision
+{
+	ap_uint<1> is_acceptable; 
+	ap_uint<24> qpn; 
+}
+
 /* Internal read */
 struct memCmdInternal
 {
@@ -604,6 +611,10 @@ void ib_transport_protocol(
 	// QP
 	hls::stream<qpContext>&	s_axis_qp_interface,
 	hls::stream<ifConnReq>&	s_axis_qp_conn_interface,
+
+	// IntrusionDecision In- and Output
+	hls::stream<intrusionDecision>& intrusionDecisionIn, 
+	hls::stream<intrusionDecision>& intrusionDecisionOut, 
 
 	// Debug
 #ifdef DBG_IBV
