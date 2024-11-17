@@ -49,6 +49,9 @@ void rocev2(
 	hls::stream<ifConnReq>&	s_axis_qp_conn_interface,
 	ap_uint<128> local_ip_address,
 
+	hls::stream<intrusionDecision>& intrusionDecisionIn, 
+	hls::stream<intrusionDecision>& intrusionDecisionOut, 
+
 	//Debug output
 #ifdef DBG_IBV
 	hls::stream<psnPkg>& m_axis_dbg_0,
@@ -159,6 +162,9 @@ void rocev2(
 		s_axis_mem_read_data,
 		s_axis_qp_interface,
 		s_axis_qp_conn_interface,
+		intrusionDecisionIn, 
+		intrusionDecisionOut, 
+
 #ifdef DBG_IBV
 		m_axis_dbg_0,
 		m_axis_dbg_1,
@@ -191,6 +197,9 @@ void rocev2_top(
 	stream<qpContext>& s_axis_qp_interface,
 	stream<ifConnReq>& s_axis_qp_conn_interface,
 	ap_uint<128> local_ip_address,
+
+	stream<intrusionDecision>& intrusionDecisionIn, 
+	stream<intrusionDecision>& intrusionDecisionOut, 
 
 	//Debug output
 #ifdef DBG_IBV
@@ -232,6 +241,9 @@ void rocev2_top(
 	#pragma HLS INTERFACE axis register port=s_axis_qp_conn_interface
 	#pragma HLS aggregate  variable=s_axis_qp_interface compact=bit
 	#pragma HLS aggregate  variable=s_axis_qp_conn_interface compact=bit
+	#pragma HLS INTERFACE axis register port=intrusionDecisionIn depth=5
+	#pragma HLS aggregate variable=intrusionDecisionIn compact=bit
+	#pragma HLS INTERFACE axis register port=intrusionDecisionOut
 
 	#pragma HLS INTERFACE ap_none register port=local_ip_address
 
@@ -279,6 +291,9 @@ void rocev2_top(
 		s_axis_qp_conn_interface,
 		local_ip_address,
 
+		intrusionDecisionIn, 
+		intrusionDecisionOut, 
+
 #ifdef DBG_IBV
 		m_axis_dbg_0,
 		m_axis_dbg_1,
@@ -310,6 +325,9 @@ void rocev2_top(
 	stream<qpContext>& s_axis_qp_interface,
 	stream<ifConnReq>& s_axis_qp_conn_interface,
 	ap_uint<128> local_ip_address,
+
+	stream<intrusionDecision>& intrusionDecisionIn, 
+	stream<intrusionDecision>& intrusionDecisionOut, 
 
 	//Debug output
 #ifdef DBG_IBV
