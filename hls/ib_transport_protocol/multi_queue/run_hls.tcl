@@ -11,7 +11,8 @@ add_files -tb test_multi_queue.cpp
 
 open_solution "solution1"
 set_part {xc7vx690tffg1761-2}
-create_clock -period 6.4 -name default
+create_clock -period ${CLOCK_PERIOD} -name default
+set_clock_uncertainty ${CLOCK_UNCERTAINTY} default
 
 csynth_design
 export_design -format ip_catalog -display_name "Multi Queue Data Structure" -description "" -vendor "ethz.systems.fpga" -version "0.1"

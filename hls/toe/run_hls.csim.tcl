@@ -27,7 +27,8 @@ add_files -tb toe_tb.cpp
 
 open_solution "solution1"
 set_part {xc7vx690tffg1761-2}
-create_clock -period 6.66 -name default
+create_clock -period ${CLOCK_PERIOD} -name default
+set_clock_uncertainty ${CLOCK_UNCERTAINTY} default
 
 #csim_design -clean -argv {../../../../testVectors/io_finwp_5.dat ../../../../testVectors/rxOutput.dat ../../../../testVectors/txOutput.dat ../../../../testVectors/rx_io_finwp_5.gold}
 csim_design -clean -argv {0 ../../../../testVectors/io_fin_5.dat ../../../../testVectors/rxOutput.dat ../../../../testVectors/txOutput.dat ../../../../testVectors/rx_io_fin_5.gold}

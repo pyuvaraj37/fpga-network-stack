@@ -7,7 +7,8 @@ add_files -tb test_mac_ip_encode.cpp
 
 open_solution "solution1"
 set_part {xcvu9p-flga2104-2L-e}
-create_clock -period 6.4 -name default
+create_clock -period ${CLOCK_PERIOD} -name default
+set_clock_uncertainty ${CLOCK_UNCERTAINTY} default
 
 #config_rtl -disable_start_propagation
 csim_design

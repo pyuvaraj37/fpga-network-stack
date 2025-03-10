@@ -34,7 +34,6 @@
 #include "../udp/udp.hpp"
 #include "../crc/crc.hpp"
 #include "../ib_transport_protocol/ib_transport_protocol.hpp"
-//#include "../pointer_chasing/pointer_chasing.hpp"
 
 #if IP_VERSION == 6
 typedef ipv6Meta ipMeta;
